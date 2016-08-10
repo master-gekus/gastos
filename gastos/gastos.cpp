@@ -3,4 +3,5 @@
 
 Gastos::Gastos()
 {
+  printf("Gastos::Gastos()\n");
 }

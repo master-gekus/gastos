@@ -6,15 +6,24 @@
 
 QT       -= gui
 
-TARGET = gastos
+win32:CONFIG(debug, debug|release) {
+	TARGET = gastosd
+} else {
+	TARGET = gastos
+}
+
+DESTDIR = $$PWD/lib
+
 TEMPLATE = lib
 
 DEFINES += GASTOS_LIBRARY
 
-SOURCES += gastos.cpp
+SOURCES += \
+	gastos.cpp
 
-HEADERS += gastos.h\
-        gastos_global.h
+HEADERS += \
+	gastos.h \
+	gastos_global.h
 
 unix {
     target.path = /usr/lib
