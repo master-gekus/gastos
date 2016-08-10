@@ -13,7 +13,7 @@ SOURCES += main.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../gastos/lib/ -lgastos
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../gastos/lib/ -lgastosd
-else:unix: LIBS += -L$$OUT_PWD/../gastos/ -lgastos
+else:unix: LIBS += -L$$PWD/../gastos/lib/ -lgastos
 
 INCLUDEPATH += $$PWD/../gastos
 DEPENDPATH += $$PWD/../gastos
