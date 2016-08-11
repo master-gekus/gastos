@@ -1,28 +1,23 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-08-10T18:31:55
+# Project created by QtCreator 2016-08-11T05:30:37
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += testlib
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       -= gui
 
-TARGET = test-gastos
+TARGET = tst_gastostest
+CONFIG   += console
+CONFIG   -= app_bundle
+
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
-
-HEADERS  += mainwindow.h
-
-FORMS    += mainwindow.ui
-
+SOURCES += tst_gastostest.cpp
+DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../gastos/lib/ -lgastos
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../gastos/lib/ -lgastosd
 else:unix: LIBS += -L$$PWD/../gastos/lib/ -lgastos
-
-INCLUDEPATH += $$PWD/../gastos
-DEPENDPATH += $$PWD/../gastos
