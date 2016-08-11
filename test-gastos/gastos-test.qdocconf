@@ -1,0 +1,33 @@
+project                 = test-gastos
+description             = Gastos
+version                 = 1.1.1
+
+headerdirs  += .
+sourcedirs  += .
+exampledirs = .
+imagedirs   = .
+
+sources.fileextensions = *.cpp
+headers.fileextensions = *.h
+
+outputencoding = UTF-8
+sourceencoding = UTF-8
+
+# tagfile = test-gastos.tags
+
+qhp.projects            = Gastos
+
+qhp.Gastos.file                = gastos.qhp
+qhp.Gastos.namespace           = org.master-gekus.gastos.1.0.0
+qhp.Gastos.virtualFolder       = gastos
+qhp.Gastos.indexTitle          = Gastos
+qhp.Gastos.indexRoot           =
+
+# qhp.Gastos.filterAttributes    = qtcore $QT_VERSION qtrefdoc
+# qhp.Gastos.customFilters.Qt.name = QtCore $QT_VERSION
+# qhp.Gastos.customFilters.Qt.filterAttributes = qtcore $QT_VERSION
+qhp.Gastos.subprojects         = classes
+qhp.Gastos.subprojects.classes.title = C++ Classes
+qhp.Gastos.subprojects.classes.indexTitle = Gastos C++ Classes
+qhp.Gastos.subprojects.classes.selectors = class fake:headerfile
+qhp.Gastos.subprojects.classes.sortPages = true

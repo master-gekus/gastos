@@ -17,6 +17,18 @@ public:
 
 private:
   Ui::MainWindow *ui;
+
+signals:
+  void test_signal();
+
+public slots:
+  void public_slot();
+
+private slots:
+  void private_slot();
+
+public:
+  static void static_function(int a);
 };
 
 #endif // MAINWINDOW_H

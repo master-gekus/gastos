@@ -26,3 +26,14 @@ else:unix: LIBS += -L$$PWD/../gastos/lib/ -lgastos
 
 INCLUDEPATH += $$PWD/../gastos
 DEPENDPATH += $$PWD/../gastos
+
+qtPrepareTool(QDOC, qdoc)
+# message($$QDOC)
+
+docs_html.target = docs_html
+docs_html.commands += $$QDOC $$PWD/gastos-test.qdocconf --outputdir $$OUT_PWD/docs
+QMAKE_EXTRA_TARGETS += docs_html
+
+
+# QDOC_FILES += gastos-test.qdocconf
+
