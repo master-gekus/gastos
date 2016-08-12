@@ -1,17 +1,6 @@
-QT += testlib
-QT -= gui
-
 TARGET = libgastos-test
 
-CONFIG += console
-CONFIG -= app_bundle
-
-TEMPLATE = app
-
-SOURCES += \
-  libgastos-test.cpp
-
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
+include($$PWD/libgastos-test.pri)
 
 INCLUDEPATH *= $$PWD/../include
 

@@ -6,15 +6,9 @@ win32:CONFIG(debug, debug|release) {
 
 QT -= gui
 
-INCLUDEPATH *= $$PWD/include
-
 TEMPLATE = lib
 
+include($$PWD/libgastos.pri)
+
+DEFINES -= GASTOS_LIBRARY_INSOURCE
 DEFINES += GASTOS_LIBRARY
-
-SOURCES += \
-  src/GAsn1Object.cpp
-
-HEADERS += \
-  include/gastos.h \
-  include/GAsn1Object.h
