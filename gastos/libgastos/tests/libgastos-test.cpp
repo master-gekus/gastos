@@ -28,44 +28,45 @@ void GastosTest::cleanupTestCase()
 {
 }
 
+#define VERIFY_ASN1_OBJECT(object, type, tag, cls, constucted) \
+do {\
+  auto const& o = (object); \
+  QCOMPARE(o.objectClass(), cls); \
+  QCOMPARE(o.objectTag(), static_cast<GAsn1Object::Tag>(tag)); \
+  if (GAsn1Object::Universal == o.objectClass()) \
+    { \
+      QCOMPARE(o.objectType(), static_cast<GAsn1Object::Type>(type)); \
+    } \
+  QCOMPARE(o.isConstructed(), constucted); \
+  QCOMPARE(o.isPrimitive(), !constucted); \
+} while (false)
+
+#define VERIFY_UNIVERSAL(object, tag, constucted) \
+  VERIFY_ASN1_OBJECT(object, tag, tag, GAsn1Object::Universal, constucted)
+
+#define VERIFY_ASN1OBJECT_COPYING(object) \
+do {\
+  const GAsn1Object& o = (object); \
+  GAsn1Object::Tag tag = o.objectTag(); \
+  GAsn1Object::Type type = static_cast<GAsn1Object::Type>(tag); \
+  GAsn1Object::Class cls = o.objectClass(); \
+  if (GAsn1Object::Universal == cls) \
+    type = o.objectType(); \
+\
+  GAsn1Object o1(o), o2; \
+  VERIFY_ASN1_OBJECT(o1, tag, type, cls, o.isConstructed()); \
+\
+  o2 = o; \
+  VERIFY_ASN1_OBJECT(o2, tag, type, cls, o.isConstructed()); \
+\
+} while(false)
+
+
 void GastosTest::testSimpleConstrutor()
 {
   GAsn1Object g1;
-  QVERIFY(g1.objectType() == GAsn1Object::Null);
-  QVERIFY(g1.objectTag() == static_cast<GAsn1Object::Tag>(GAsn1Object::Null));
-  QVERIFY(g1.objectClass() == GAsn1Object::Universal);
-  QVERIFY(!g1.isConstructed());
-  QVERIFY(g1.isPrimitive());
-
-  GAsn1Object g2(g1);
-  QVERIFY(g2.objectType() == GAsn1Object::Null);
-  QVERIFY(g2.objectTag() == static_cast<GAsn1Object::Tag>(GAsn1Object::Null));
-  QVERIFY(g2.objectClass() == GAsn1Object::Universal);
-  QVERIFY(!g2.isConstructed());
-  QVERIFY(g2.isPrimitive());
-
-  GAsn1Object* pg = new GAsn1Object();
-  QVERIFY(pg->objectType() == GAsn1Object::Null);
-  QVERIFY(pg->objectTag() == static_cast<GAsn1Object::Tag>(GAsn1Object::Null));
-  QVERIFY(pg->objectClass() == GAsn1Object::Universal);
-  QVERIFY(!pg->isConstructed());
-  QVERIFY(pg->isPrimitive());
-
-  GAsn1Object g3(*pg);
-  delete pg;
-  QVERIFY(g3.objectType() == GAsn1Object::Null);
-  QVERIFY(g3.objectTag() == static_cast<GAsn1Object::Tag>(GAsn1Object::Null));
-  QVERIFY(g3.objectClass() == GAsn1Object::Universal);
-  QVERIFY(!g3.isConstructed());
-  QVERIFY(g3.isPrimitive());
-
-  GAsn1Object g4;
-  g4 = g1;
-  QVERIFY(g4.objectType() == GAsn1Object::Null);
-  QVERIFY(g4.objectTag() == static_cast<GAsn1Object::Tag>(GAsn1Object::Null));
-  QVERIFY(g4.objectClass() == GAsn1Object::Universal);
-  QVERIFY(!g4.isConstructed());
-  QVERIFY(g4.isPrimitive());
+  VERIFY_UNIVERSAL(g1, GAsn1Object::Null, false);
+  VERIFY_ASN1OBJECT_COPYING(g1);
 }
 
 QTEST_APPLESS_MAIN(GastosTest)
