@@ -67,11 +67,20 @@ public:
   GAsn1Object& operator =(const GAsn1Object& other);
 
 public:
+  GAsn1Object(Type object_type);
+
+public:
   Type objectType() const;
   Tag objectTag() const;
   Class objectClass() const;
   bool isConstructed() const;
   bool isPrimitive() const;
+  bool canBeConstructed() const;
+  bool canBePrimitive() const;
+  static bool canBeConstructed(Tag tag);
+  static bool canBePrimitive(Tag tag);
+  static bool canBeConstructed(Type type);
+  static bool canBePrimitive(Type type);
 
 public:
   static QString typeToString(Type object_type);
@@ -83,6 +92,9 @@ private:
 
 Q_DECLARE_METATYPE(GAsn1Object)
 Q_DECLARE_TYPEINFO(GAsn1Object, Q_MOVABLE_TYPE);
+
+Q_DECLARE_METATYPE(GAsn1Object::Type)
+Q_DECLARE_METATYPE(GAsn1Object::Class)
 
 inline bool GAsn1Object::isPrimitive() const
 {

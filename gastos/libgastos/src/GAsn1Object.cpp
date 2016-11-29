@@ -8,6 +8,7 @@ class GAsn1ObjectPrivate : public QSharedData
 {
 private:
   GAsn1ObjectPrivate();
+  GAsn1ObjectPrivate(GAsn1Object::Type object_type);
   virtual ~GAsn1ObjectPrivate();
 
 private:
@@ -26,9 +27,15 @@ GAsn1ObjectPrivate::GAsn1ObjectPrivate() :
 {
 }
 
+GAsn1ObjectPrivate::GAsn1ObjectPrivate(GAsn1Object::Type object_type) :
+  tag_(static_cast<GAsn1Object::Tag>(object_type)),
+  class_(GAsn1Object::Universal),
+  is_constructed_(GAsn1Object::canBePrimitive(object_type) ? false : true)
+{
+}
+
 GAsn1ObjectPrivate::~GAsn1ObjectPrivate()
 {
-
 }
 
 // ///////////////////////////////////////////////////////////////////////////
@@ -52,6 +59,11 @@ GAsn1Object::operator=(const GAsn1Object &other)
 }
 
 GAsn1Object::~GAsn1Object()
+{
+}
+
+GAsn1Object::GAsn1Object(Type object_type) :
+  d(new GAsn1ObjectPrivate(object_type))
 {
 }
 
@@ -79,6 +91,78 @@ bool
 GAsn1Object::isConstructed() const
 {
   return d->is_constructed_;
+}
+
+bool
+GAsn1Object::canBeConstructed(Type type)
+{
+  switch (type)
+    {
+      case EndOfContent:
+      case Boolean:
+      case Integer:
+      case Null:
+      case ObjectIdentifier:
+      case Real:
+      case Enumerated:
+      case RelativeOID:
+        return false;
+
+      default:
+        return true;
+    }
+}
+
+bool
+GAsn1Object::canBePrimitive(GAsn1Object::Type type)
+{
+  switch (type)
+    {
+      case External:
+      case EmbeddedPDV:
+      case Sequence:
+      case Set:
+        return false;
+
+      default:
+        return true;
+    }
+}
+
+bool
+GAsn1Object::canBeConstructed(Tag tag)
+{
+  if (static_cast<Tag>(MaxUniversalType) < tag)
+    return true;
+
+  return canBeConstructed(static_cast<Type>(tag));
+}
+
+bool
+GAsn1Object::canBePrimitive(Tag tag)
+{
+  if (static_cast<Tag>(MaxUniversalType) < tag)
+    return true;
+
+  return canBePrimitive(static_cast<Type>(tag));
+}
+
+bool
+GAsn1Object::canBeConstructed() const
+{
+  if (Universal != d->class_)
+    return true;
+
+  return canBeConstructed(d->tag_);
+}
+
+bool
+GAsn1Object::canBePrimitive() const
+{
+  if (Universal != d->class_)
+    return true;
+
+  return canBePrimitive(d->tag_);
 }
 
 #define ENUM_CASE(e) case e: return QStringLiteral(#e)

@@ -28,18 +28,24 @@ public:
 private Q_SLOTS:
   void initTestCase();
   void cleanupTestCase();
+
   void testSimpleConstrutor();
+
+  void testTypeConstructor_data();
+  void testTypeConstructor();
 };
 
 GastosTest::GastosTest()
 {
 }
 
-void GastosTest::initTestCase()
+void
+GastosTest::initTestCase()
 {
 }
 
-void GastosTest::cleanupTestCase()
+void
+GastosTest::cleanupTestCase()
 {
 }
 
@@ -76,11 +82,74 @@ do {\
 \
 } while(false)
 
-void GastosTest::testSimpleConstrutor()
+void
+GastosTest::testSimpleConstrutor()
 {
   GAsn1Object g1;
   VERIFY_UNIVERSAL(g1, GAsn1Object::Null, false);
   VERIFY_ASN1OBJECT_COPYING(g1);
+}
+
+#define TESTTYPEC_ROW(type)\
+  QTest::newRow(#type) \
+    << GAsn1Object(GAsn1Object::type) \
+    << GAsn1Object::type
+
+void
+GastosTest::testTypeConstructor_data()
+{
+  QTest::addColumn<GAsn1Object>("object");
+  QTest::addColumn<GAsn1Object::Type>("type");
+  QTest::addColumn<bool>("constructed");
+  QTest::addColumn<bool>("can_be_constructed");
+  QTest::addColumn<bool>("can_be_primitive");
+
+  TESTTYPEC_ROW(EndOfContent) << false << false << true;
+  TESTTYPEC_ROW(Boolean) << false << false << true;
+  TESTTYPEC_ROW(Integer) << false << false << true;
+  TESTTYPEC_ROW(BitString) << false << true << true;
+  TESTTYPEC_ROW(OctetString) << false << true << true;
+  TESTTYPEC_ROW(Null) << false << false << true;
+  TESTTYPEC_ROW(ObjectIdentifier) << false << false << true;
+  TESTTYPEC_ROW(ObjectDescriptor) << false << true << true;
+  TESTTYPEC_ROW(External) << true << true << false;
+  TESTTYPEC_ROW(Real) << false << false << true;
+  TESTTYPEC_ROW(Enumerated) << false << false << true;
+  TESTTYPEC_ROW(EmbeddedPDV) << true << true << false;
+  TESTTYPEC_ROW(Utf8String) << false << true << true;
+  TESTTYPEC_ROW(RelativeOID) << false << false << true;
+  TESTTYPEC_ROW(Reserved1) << false << true << true;
+  TESTTYPEC_ROW(Reserved2) << false << true << true;
+  TESTTYPEC_ROW(Sequence) << true << true << false;
+  TESTTYPEC_ROW(Set) << true << true << false;
+  TESTTYPEC_ROW(NumericString) << false << true << true;
+  TESTTYPEC_ROW(PrintableString) << false << true << true;
+  TESTTYPEC_ROW(T61String) << false << true << true;
+  TESTTYPEC_ROW(VideotexString) << false << true << true;
+  TESTTYPEC_ROW(IA5String) << false << true << true;
+  TESTTYPEC_ROW(UTCTime) << false << true << true;
+  TESTTYPEC_ROW(GeneralizedTime) << false << true << true;
+  TESTTYPEC_ROW(GraphicString) << false << true << true;
+  TESTTYPEC_ROW(VisibleString) << false << true << true;
+  TESTTYPEC_ROW(GeneralString) << false << true << true;
+  TESTTYPEC_ROW(UniversalString) << false << true << true;
+  TESTTYPEC_ROW(CharacterString) << false << true << true;
+  TESTTYPEC_ROW(BMPString) << false << true << true;
+}
+
+void
+GastosTest::testTypeConstructor()
+{
+  QFETCH(GAsn1Object, object);
+  QFETCH(GAsn1Object::Type, type);
+  QFETCH(bool, constructed);
+  QFETCH(bool, can_be_constructed);
+  QFETCH(bool, can_be_primitive);
+
+  VERIFY_UNIVERSAL(object, type, constructed);
+  VERIFY_ASN1OBJECT_COPYING(object);
+  QCOMPARE(object.canBeConstructed(), can_be_constructed);
+  QCOMPARE(object.canBePrimitive(), can_be_primitive);
 }
 
 QTEST_APPLESS_MAIN(GastosTest)
