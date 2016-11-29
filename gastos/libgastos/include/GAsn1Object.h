@@ -73,6 +73,10 @@ public:
   bool isConstructed() const;
   bool isPrimitive() const;
 
+public:
+  static QString typeToString(Type object_type);
+  static QString classToString(Class object_class);
+
 private:
   QSharedDataPointer<GAsn1ObjectPrivate> d;
 };
