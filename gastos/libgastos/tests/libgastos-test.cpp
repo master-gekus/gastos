@@ -3,6 +3,21 @@
 
 #include "GAsn1Object.h"
 
+namespace QTest
+{
+  template <>
+  char* toString(const GAsn1Object::Type& object_type)
+  {
+    return qstrdup(GAsn1Object::typeToString(object_type).toUtf8().constData());
+  }
+
+  template <>
+  char* toString(const GAsn1Object::Class& object_class)
+  {
+    return qstrdup(GAsn1Object::classToString(object_class).toUtf8().constData());
+  }
+}
+
 class GastosTest : public QObject
 {
   Q_OBJECT
@@ -60,7 +75,6 @@ do {\
   VERIFY_ASN1_OBJECT(o2, tag, type, cls, o.isConstructed()); \
 \
 } while(false)
-
 
 void GastosTest::testSimpleConstrutor()
 {
